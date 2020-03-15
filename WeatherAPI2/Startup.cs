@@ -74,16 +74,13 @@ namespace WeatherAPI2
 
         private static void SetOutputFormatters(IServiceCollection services)
         {
-            services.AddMvcCore(options =>
+            services.AddMvcCore(op =>
             {
-                IEnumerable<ODataOutputFormatter> outputFormatters =
-                    options.OutputFormatters.OfType<ODataOutputFormatter>()
-                        .Where(foramtter => foramtter.SupportedMediaTypes.Count == 0);
+                foreach (var formatter in op.OutputFormatters.OfType<ODataOutputFormatter>().Where(it => it.SupportedMediaTypes.Count == 0))
+                    formatter.SupportedMediaTypes.Add(new MediaTypeHeaderValue("application/odata"));
 
-                foreach (var outputFormatter in outputFormatters)
-                {
-                    outputFormatter.SupportedMediaTypes.Add(new MediaTypeHeaderValue("application/odata"));
-                }
+                foreach (var formatter in op.InputFormatters.OfType<ODataInputFormatter>().Where(it => it.SupportedMediaTypes.Count == 0))
+                    formatter.SupportedMediaTypes.Add(new MediaTypeHeaderValue("application/odata"));
             });
         }
     }
