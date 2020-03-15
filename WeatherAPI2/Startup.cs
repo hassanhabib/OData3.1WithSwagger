@@ -11,6 +11,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Net.Http.Headers;
 using Microsoft.OData.Edm;
 using Microsoft.OpenApi.Models;
+using WeatherAPI2.Infra;
 
 namespace WeatherAPI2
 {
@@ -62,6 +63,7 @@ namespace WeatherAPI2
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+                c.OperationFilter<SwaggerAddODataField>();
             });
         }
 
